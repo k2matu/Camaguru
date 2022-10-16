@@ -1,0 +1,8 @@
+PUT http://localhost:3003/api/users/6348d316458677a45594f081 HTTP/1.1
+content-type: application/json
+
+{
+	"email": "kstt90@gmail.com",
+	"username": "dsa2",
+	"status": "Active"
+}
