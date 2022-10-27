@@ -17,16 +17,10 @@ const remove = (confirmationCode) => {
 	return axios.delete(`${baseUrl}/${confirmationCode}`);
 };
 
-const update = (confirmationCode, newObject) => {
-	const request = axios.put(`${baseUrl}/${confirmationCode}`, newObject);
-	return request.then((response) => response.data);
-};
-
 // eslint-disable-next-line
 export default {
 	getAll,
 	getOne,
 	create,
 	remove,
-	update,
 };

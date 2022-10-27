@@ -1,8 +1,9 @@
-PUT http://localhost:3003/api/users/6348d316458677a45594f081 HTTP/1.1
+PATCH http://localhost:3003/api/users/63538bf46cf6398623112291 HTTP/1.1
 content-type: application/json
 
 {
 	"email": "kstt90@gmail.com",
-	"username": "dsa2",
-	"status": "Active"
+	"username": "kim",
+	"status": "Active",
+	"password": "ke.Ad1AW"
 }

@@ -1,22 +1,24 @@
 import { useJwt } from "react-jwt";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setUsers } from "../reducer/userReducer";
-import { notification } from "../reducer/notificationReducer";
+import { useParams } from "react-router-dom";
 
-import Notification from "./Notification";
+import { setUsers } from "../../reducer/userReducer";
+import { notification } from "../../reducer/notificationReducer";
 
-import { useParams, Link } from "react-router-dom";
+import Notification from "../../components/Notification";
+import Button from "../../components/Button";
+import Link from "../../components/LinkTo";
 
-import tokenService from "../services/token";
-import userService from "../services/user";
+import tokenService from "../../services/token";
+import userService from "../../services/user";
 
-const AccConfirmed = () => {
-	const dispatch = useDispatch();
+const Confirm = () => {
 	const [token, setToken] = useState("");
 	const [success, setSuccess] = useState(false);
 	const users = useSelector((state) => state.user);
 
+	const dispatch = useDispatch();
 	const confirmationCode = useParams().confirmationCode;
 	const { isExpired } = useJwt(confirmationCode);
 
@@ -29,12 +31,7 @@ const AccConfirmed = () => {
 	const user = users.find((user) => user.id === token.user);
 
 	if (user?.status === "Pending" && !isExpired) {
-		const confirmed = {
-			email: user.email,
-			username: user.username,
-			status: "Active",
-		};
-		userService.update(user.id, confirmed).then((response) => {
+		userService.updateUser(user.id, { status: "Active" }).then((response) => {
 			dispatch(setUsers(users.map((n) => (n.id !== user.id ? n : response))));
 			tokenService.remove(token.token).then(setToken(""));
 			setSuccess(true);
@@ -43,7 +40,6 @@ const AccConfirmed = () => {
 
 	const resendCode = () => {
 		if (user) {
-			console.log("resending");
 			const newToken = {
 				email: user.email,
 				username: user.username,
@@ -51,33 +47,35 @@ const AccConfirmed = () => {
 			tokenService.remove(token.token).then(setToken(""));
 			tokenService.create(newToken);
 			dispatch(
-				notification(`Successfully resent new confirmationCode`, 60 * 5)
+				notification(`Successfully resent new confirmationCode`, 60 * 2)
 			);
 		}
 	};
 
 	if (success) {
 		return (
-			<div>
+			<>
 				<div>Account confirmed</div>
-				<Link to="/">Login</Link>
-			</div>
+				<Link to="/" name="Login" />
+			</>
 		);
 	} else if (isExpired) {
 		return (
-			<div>
+			<>
 				<div>Token is invalid or expired</div>
 				<Notification>
-					<div>
-						Send new confirmationCode?{" "}
-						<button onClick={resendCode}>send</button>
-					</div>
+					<Button
+						pretext="Send new confirmationcode?"
+						onClick={resendCode}
+						name="send"
+					/>
 				</Notification>
-			</div>
+				<a href="/">Login In</a>
+			</>
 		);
 	} else {
 		return <div>Loading...</div>;
 	}
 };
 
-export default AccConfirmed;
+export default Confirm;

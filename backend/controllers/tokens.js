@@ -45,7 +45,7 @@ tokenRouter.post("/", async (request, response) => {
 tokenRouter.delete("/:confirmationCode", async (request, response) => {
 	await Token.findOneAndDelete({
 		token: request.params.confirmationCode,
-	}).exec();
+	});
 	response.status(204).end();
 });
 
@@ -57,7 +57,7 @@ tokenRouter.put("/:confirmationCode", (request, response, next) => {
 		username,
 	};
 
-	const token = jwt.sign(tokenForUser, config.SECRET, { expiresIn: 60 * 5 });
+	const token = jwt.sign(tokenForUser, config.SECRET, { expiresIn: 60 * 60 });
 
 	const confirmationCode = {
 		token: token,

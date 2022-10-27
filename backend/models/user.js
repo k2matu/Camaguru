@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		required: true,
+		unique: true,
 		validate: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 	},
 	username: {
@@ -19,7 +21,7 @@ const userSchema = new mongoose.Schema({
 	},
 	status: {
 		type: String,
-		enum: ["Pending", "Active"],
+		enum: ["Pending", "Active", "Modified"],
 		default: "Pending",
 	},
 });

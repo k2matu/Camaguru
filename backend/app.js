@@ -7,8 +7,10 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("express-async-errors");
 
+const loginRouter = require("./controllers/login");
 const usersRouter = require("./controllers/users");
 const tokenRouter = require("./controllers/tokens");
+const repassRouter = require("./controllers/repasses");
 const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 
@@ -27,6 +29,8 @@ app.use(morgan("tiny"));
 
 app.use("/api/users", usersRouter);
 app.use("/api/tokens", tokenRouter);
+app.use("/api/repass", repassRouter);
+app.use("/api/login", loginRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

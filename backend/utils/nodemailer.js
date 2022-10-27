@@ -29,3 +29,20 @@ module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
 		})
 		.catch((err) => logger.error(err));
 };
+
+module.exports.sendRepassEmail = (email, code) => {
+	transport
+		.sendMail({
+			from: "thecamaguruproject@gmail.com",
+			to: email,
+			subject: `Reset your Camaguru account password`,
+			html: `<div> 
+		<h1>Recovery code</h1>
+		<p>Hi, </p>
+		<p>We received a request to reset your Camaguru password.</p>
+		<p>Click on the link below to reset your password.</p>
+		<a href=http://localhost:3000/repassword/${code}> Click here </a>
+		</div>`,
+		})
+		.catch((err) => logger.error(err));
+};

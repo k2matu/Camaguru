@@ -3,11 +3,12 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUsers } from "../reducer/userReducer";
 
-import RePassword from "./RePassword";
-import Register from "./Register";
-import AccConfirmed from "./AccConfirmed";
+import Profile from "./UserFeatures/Profile";
+import Resend from "./UserFeatures/Password/Resend";
+import Repassword from "./UserFeatures/Password/Repassword";
+import Register from "./UserFeatures/Register";
+import Confirm from "./UserFeatures/Confirm";
 import Home from "./Home";
-import Message from "./Message";
 
 import userService from "../services/user";
 
@@ -24,10 +25,11 @@ const Path = () => {
 	return (
 		<div>
 			<Routes>
-				<Route path="/confirm/:confirmationCode" element={<AccConfirmed />} />
+				<Route path="/confirm/:confirmationCode" element={<Confirm />} />
 				<Route path="/register" element={<Register />} />
-				<Route path="/message" element={<Message />} />
-				<Route path="/repassword" element={<RePassword />} />
+				<Route path="/repassword/:code" element={<Repassword />} />
+				<Route path="/resend/" element={<Resend />} />
+				<Route path="/profile/" element={<Profile />} />
 				<Route path="/" element={<Home />} />
 			</Routes>
 		</div>

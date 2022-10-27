@@ -13,8 +13,13 @@ const remove = (id) => {
 	return axios.delete(`${baseUrl}/${id}`);
 };
 
-const update = (id, newObject) => {
+const updateUser = (id, newObject) => {
 	const request = axios.put(`${baseUrl}/${id}`, newObject);
+	return request.then((response) => response.data);
+};
+
+const changePassword = (id, newObject) => {
+	const request = axios.patch(`${baseUrl}/${id}`, newObject);
 	return request.then((response) => response.data);
 };
 
@@ -23,5 +28,6 @@ export default {
 	getAll,
 	create,
 	remove,
-	update,
+	updateUser,
+	changePassword,
 };

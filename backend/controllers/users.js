@@ -22,8 +22,9 @@ usersRouter.get("/:id", async (request, response) => {
 usersRouter.post("/", async (request, response) => {
 	const { email, username, password } = request.body;
 
+	const existingEmail = await User.findOne({ email });
 	const existingUser = await User.findOne({ username });
-	if (existingUser) {
+	if (existingUser || existingEmail) {
 		return response.status(400).json({
 			error: "username must be unique",
 		});
@@ -39,17 +40,38 @@ usersRouter.post("/", async (request, response) => {
 	});
 
 	const savedUser = await user.save();
-
 	response.status(201).json(savedUser);
+});
+
+usersRouter.patch("/:id", async (request, response, next) => {
+	const body = request.body;
+
+	const saltRounds = 10;
+	const passwordHash = await bcrypt.hash(body.password, saltRounds);
+
+	User.findOneAndUpdate(
+		request.params.id,
+		{ passwordHash: passwordHash },
+		{
+			new: true,
+			runValidators: true,
+			context: "query",
+		}
+	)
+		.then((updatedUser) => {
+			console.log(updatedUser);
+			response.json(updatedUser);
+		})
+		.catch((error) => next(error));
 });
 
 usersRouter.put("/:id", (request, response, next) => {
 	const body = request.body;
 
 	const user = {
+		username: body.username,
 		email: body.email,
 		status: body.status,
-		username: body.username,
 	};
 
 	User.findByIdAndUpdate(request.params.id, user, {
@@ -57,7 +79,9 @@ usersRouter.put("/:id", (request, response, next) => {
 		runValidators: true,
 		context: "query",
 	})
-		.then((updatedUser) => response.json(updatedUser))
+		.then((updatedUser) => {
+			response.json(updatedUser);
+		})
 		.catch((error) => next(error));
 });
 
