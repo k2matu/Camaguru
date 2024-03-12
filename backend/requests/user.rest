@@ -1,9 +1,0 @@
-PATCH http://localhost:3003/api/users/63538bf46cf6398623112291 HTTP/1.1
-content-type: application/json
-
-{
-	"email": "kstt90@gmail.com",
-	"username": "kim",
-	"status": "Active",
-	"password": "ke.Ad1AW"
-}
